@@ -4,31 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>RetEarn Ready</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ── Reset ───────────────────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Design tokens ───────────────────────────────────────────────────────── */
+    /* ── Design tokens (retearn.ai brand palette) ────────────────────────────── */
     :root {
-      --green:        #1a6b3c;
-      --green-deep:   #145430;
-      --green-soft:   #e6f4ec;
-      --green-mid:    #c8e6d4;
-      --white:        #ffffff;
-      --bg:           #f5f5f7;
-      --surface:      #ffffff;
-      --text:         #1d1d1f;
-      --text-2:       #6e6e73;
-      --text-3:       #aeaeb2;
-      --border:       rgba(0,0,0,0.08);
-      --shadow-xs:    0 1px 2px rgba(0,0,0,0.04);
-      --shadow-sm:    0 1px 4px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
-      --shadow-md:    0 4px 20px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-      --green-glow:   0 4px 16px rgba(26,107,60,0.28);
+      --purple:       #6A38BE;
+      --purple-dk:    #5229A3;
+      --purple-lt:    #7C4FCC;
+      --purple-bg:    #F3EEFF;
+      --purple-line:  #E4D7FF;
+      --purple-deep:  #2D1F5E;
+      --green:        #16A34A;
+      --green-bg:     #DCFCE7;
+      --white:        #FFFFFF;
+      --bg:           #F9F8FC;
+      --surface:      #FFFFFF;
+      --text:         #111827;
+      --text-2:       #374151;
+      --text-3:       #6B7280;
+      --text-4:       #9CA3AF;
+      --border:       #E5E7EB;
+      --border-dk:    #D1D5DB;
+      --shadow-xs:    0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-sm:    0 4px 16px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04);
+      --shadow-md:    0 12px 40px rgba(0,0,0,0.09), 0 4px 12px rgba(0,0,0,0.05);
+      --purple-glow:  0 8px 28px rgba(106,56,190,0.28);
       --r-bubble:     18px;
       --r-input:      26px;
-      --font:         -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-      --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      --font:         'Poppins', system-ui, -apple-system, sans-serif;
+      --font-display: 'Poppins', system-ui, -apple-system, sans-serif;
     }
 
     /* ── Base ────────────────────────────────────────────────────────────────── */
@@ -52,7 +61,7 @@
     /* ── Header ──────────────────────────────────────────────────────────────── */
     header {
       flex-shrink: 0;
-      background: var(--green);
+      background: var(--purple);
       padding: 14px 20px;
       padding-top: calc(14px + env(safe-area-inset-top, 0px));
       display: flex;
@@ -60,8 +69,7 @@
       gap: 12px;
       position: relative;
       z-index: 10;
-      /* Subtle gradient depth */
-      background: linear-gradient(135deg, #1f7d46 0%, #1a6b3c 60%, #145430 100%);
+      background: linear-gradient(135deg, #7C4FCC 0%, #6A38BE 60%, #5229A3 100%);
       box-shadow: 0 1px 0 rgba(0,0,0,0.12), 0 2px 16px rgba(0,0,0,0.18);
     }
 
@@ -182,11 +190,11 @@
       transition: transform 0.2s;
     }
     .msg.bot  .avatar {
-      background: var(--green);
-      box-shadow: var(--green-glow);
+      background: var(--purple);
+      box-shadow: var(--purple-glow);
     }
     .msg.user .avatar {
-      background: var(--green-mid);
+      background: var(--purple-line);
     }
 
     /* ── Bubbles ─────────────────────────────────────────────────────────────── */
@@ -206,7 +214,7 @@
       box-shadow: var(--shadow-sm);
     }
     .msg.user .bubble {
-      background: var(--green);
+      background: var(--purple);
       color: #fff;
       border-bottom-right-radius: 5px;
     }
@@ -251,7 +259,7 @@
     .streaming::after {
       content: "▋";
       font-size: 11px;
-      color: var(--green);
+      color: var(--purple);
       animation: cursorBlink 0.65s step-start infinite;
       margin-left: 1px;
       vertical-align: middle;
@@ -273,8 +281,8 @@
     .chip {
       padding: 8px 15px;
       border-radius: 22px;
-      border: 1.5px solid var(--green);
-      color: var(--green);
+      border: 1.5px solid var(--purple);
+      color: var(--purple);
       background: var(--surface);
       font-family: var(--font);
       font-size: 13px;
@@ -295,10 +303,10 @@
     .chip:nth-child(5) { animation-delay: 0.33s; }
 
     .chip:hover {
-      background: var(--green);
+      background: var(--purple);
       color: #fff;
       transform: translateY(-2px);
-      box-shadow: var(--green-glow);
+      box-shadow: var(--purple-glow);
     }
     .chip:active { transform: scale(0.94); box-shadow: none; }
 
@@ -321,8 +329,8 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .input-bar:focus-within {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(26,107,60,0.10), var(--shadow-sm);
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(106,56,190,0.10), var(--shadow-sm);
     }
 
     #input {
@@ -344,7 +352,7 @@
       width: 36px; height: 36px;
       border-radius: 50%;
       border: none;
-      background: var(--green);
+      background: var(--purple);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -355,9 +363,9 @@
                   box-shadow 0.18s, opacity 0.18s;
     }
     #send:hover:not(:disabled) {
-      background: var(--green-deep);
+      background: var(--purple-dk);
       transform: scale(1.1);
-      box-shadow: var(--green-glow);
+      box-shadow: var(--purple-glow);
     }
     #send:active:not(:disabled) { transform: scale(0.91); box-shadow: none; }
     #send:disabled { background: #d1d5db; cursor: not-allowed; opacity: 0.7; }
@@ -370,7 +378,7 @@
       padding: 5px 0 2px;
     }
     .disclaimer a {
-      color: var(--green);
+      color: var(--purple);
       font-weight: 500;
       text-decoration: none;
     }
@@ -424,9 +432,8 @@
       </button>
     </div>
     <p class="disclaimer">
-      For definitive advice contact
-      <a href="https://exchangeforchange.co.uk" target="_blank" rel="noopener">Exchange for Change</a> or
-      <a href="https://acs.org.uk" target="_blank" rel="noopener">ACS</a>
+      Not affiliated with Exchange for Change or ACS. For expert advice call
+      <a href="tel:+447463577990">+44 7463577990</a>
     </p>
   </div>
 </div>
