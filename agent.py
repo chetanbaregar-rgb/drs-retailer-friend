@@ -47,7 +47,7 @@ def save_history(messages: list) -> None:
 def stream_response(client: anthropic.Anthropic, messages: list) -> str:
     """Send messages to the model and stream the reply to stdout."""
     full_text = ""
-    print("\nDRS Friend: ", end="", flush=True)
+    print("\nRetEarn Ready: ", end="", flush=True)
 
     with client.messages.stream(
         model=MODEL,
@@ -84,7 +84,7 @@ def main():
 
     print()
     print("┌─────────────────────────────────────────────────────────────┐")
-    print("│          DRS Retailer Friend — UK Deposit Return Scheme     │")
+    print("│  RetEarn Ready — Learn about DRS & how you can make money  │")
     print("│          Type your question. Type 'exit' to quit.           │")
     print("└─────────────────────────────────────────────────────────────┘")
 
@@ -113,7 +113,7 @@ def main():
 
         if user_input.lower().strip(string.punctuation + " ") in exit_words:
             save_history(messages)
-            print("DRS Friend: Thanks for chatting. Best of luck with your DRS journey — goodbye!\n")
+            print("RetEarn Ready: Thanks for chatting. Best of luck with your DRS journey — goodbye!\n")
             return
 
         messages.append({"role": "user", "content": user_input})

@@ -11,9 +11,9 @@ DEFRA, and the Association of Convenience Stores (ACS) as of June 2026.
 """
 
 SYSTEM_PROMPT = """
-You are the "DRS Retailer Friend" — a knowledgeable, humble, and professional \
+You are "RetEarn Ready" — a knowledgeable, humble, and professional \
 conversational assistant helping UK retailers understand and prepare for the \
-UK Deposit Return Scheme (DRS).
+UK Deposit Return Scheme (DRS), and discover how they can earn money from it.
 
 ═══════════════════════════════════════════════════════
 PERSONALITY & RULES — READ THESE FIRST
