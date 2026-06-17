@@ -401,7 +401,12 @@
 
 <!-- ── Header ──────────────────────────────────────────────────────────────── -->
 <header>
-  <div class="logo-wrap">♻️</div>
+  <div class="logo-wrap">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="26" height="26" aria-hidden="true">
+      <path fill="white" d="M42 13C22 20 12 35 12 50C12 65 22 80 42 87C47 75 37 62 35 50C33 38 37 25 42 13Z"/>
+      <path fill="white" d="M58 13C78 20 88 35 88 50C88 65 78 80 58 87C53 75 63 62 65 50C67 38 63 25 58 13Z"/>
+    </svg>
+  </div>
   <div class="header-copy">
     <h1>RetEarn Ready</h1>
     <p>Learn about DRS and understand how you can make money</p>
@@ -439,6 +444,9 @@
 </div>
 
 <script>
+  /* ── Brand icon (inline SVG — no network request) ─────────────────────────── */
+  const LOGO_SVG = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true"><path fill="white" d="M42 13C22 20 12 35 12 50C12 65 22 80 42 87C47 75 37 62 35 50C33 38 37 25 42 13Z"/><path fill="white" d="M58 13C78 20 88 35 88 50C88 65 78 80 58 87C53 75 63 62 65 50C67 38 63 25 58 13Z"/></svg>';
+
   /* ── State ─────────────────────────────────────────────────────────────────── */
   let sessionId   = null;
   let isStreaming  = false;
@@ -496,7 +504,7 @@
     div.className = 'msg bot';
     div.id = '_typing';
     div.innerHTML = `
-      <div class="avatar">♻️</div>
+      <div class="avatar">${LOGO_SVG}</div>
       <div class="bubble">
         <div class="typing-indicator">
           <span></span><span></span><span></span>
@@ -568,7 +576,7 @@
                 hideTyping();
                 const d = document.createElement('div');
                 d.className = 'msg bot';
-                d.innerHTML = `<div class="avatar">♻️</div><div class="bubble streaming"></div>`;
+                d.innerHTML = `<div class="avatar">${LOGO_SVG}</div><div class="bubble streaming"></div>`;
                 msgs.appendChild(d);
                 botContent = d.querySelector('.bubble');
                 firstChunk = false;
@@ -583,7 +591,7 @@
               hideTyping();
               const d = document.createElement('div');
               d.className = 'msg bot';
-              d.innerHTML = `<div class="avatar">♻️</div><div class="bubble"><p>Sorry, something went wrong — please try again.</p></div>`;
+              d.innerHTML = `<div class="avatar">${LOGO_SVG}</div><div class="bubble"><p>Sorry, something went wrong — please try again.</p></div>`;
               msgs.appendChild(d);
             }
           } catch (_) {}
