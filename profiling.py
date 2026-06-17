@@ -27,6 +27,8 @@ PROFILE_FIELDS = [
     "num_stores",
     "role",
     "intention",
+    "contact_name",
+    "contact_email",
 ]
 
 _EXTRACTION_TOOL = {
@@ -74,6 +76,20 @@ _EXTRACTION_TOOL = {
                 "description": (
                     "Why they're researching DRS, e.g. 'preparing for launch', "
                     "'deciding whether to get an RVM', 'checking if exempt'."
+                ),
+            },
+            "contact_name": {
+                "type": "string",
+                "description": (
+                    "The retailer's name, only if they volunteered it when "
+                    "asked at the end of the conversation."
+                ),
+            },
+            "contact_email": {
+                "type": "string",
+                "description": (
+                    "The retailer's email address, only if they volunteered it "
+                    "when asked at the end of the conversation."
                 ),
             },
         },
