@@ -24,12 +24,8 @@ from __future__ import annotations
 import asyncio
 import json
 import os
-import smtplib
 import time
-import urllib.parse
-import urllib.request
 import uuid
-from email.mime.text import MIMEText
 from pathlib import Path
 
 import anthropic
@@ -155,13 +151,6 @@ class SessionRequest(BaseModel):
     session_id: str
 
 
-class RegisterRequest(BaseModel):
-    session_id: str
-    name: str
-    email: str
-    store_name: str = ""
-
-
 # ── Routes ────────────────────────────────────────────────────────────────────
 
 @app.get("/", response_class=HTMLResponse)
@@ -245,58 +234,6 @@ async def chat(req: ChatRequest):
     return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 
-def _send_to_google_sheet(name: str, email: str, store_name: str) -> None:
-    """POST lead to Google Apps Script webhook. Silently skips if URL not configured."""
-    gas_url = os.environ.get("GAS_WEBHOOK_URL")
-    if not gas_url:
-        return
-    try:
-        data = urllib.parse.urlencode({
-            "name":       name,
-            "email":      email,
-            "store_name": store_name,
-            "timestamp":  time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()),
-        }).encode()
-        req = urllib.request.Request(gas_url, data=data, method="POST")
-        urllib.request.urlopen(req, timeout=10)
-    except Exception:
-        pass
-
-
-def _send_lead_email(name: str, email: str, store_name: str) -> None:
-    """Fire-and-forget email to notify retearn of a new signup. Silently skips if SMTP not configured."""
-    notify_to   = os.environ.get("NOTIFY_EMAIL")
-    smtp_host   = os.environ.get("SMTP_HOST")
-    smtp_port   = int(os.environ.get("SMTP_PORT", "587"))
-    smtp_user   = os.environ.get("SMTP_USER")
-    smtp_pass   = os.environ.get("SMTP_PASS")
-
-    if not all([notify_to, smtp_host, smtp_user, smtp_pass]):
-        return
-
-    body = (
-        f"New DRS Advisor signup\n"
-        f"{'─' * 32}\n"
-        f"Name:        {name}\n"
-        f"Email:       {email}\n"
-        f"Store name:  {store_name or 'not provided'}\n"
-        f"Time:        {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}\n"
-    )
-
-    msg = MIMEText(body)
-    msg["Subject"] = f"New lead: {name} ({store_name}) — DRS Advisor"
-    msg["From"]    = smtp_user
-    msg["To"]      = notify_to
-
-    try:
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as s:
-            s.starttls()
-            s.login(smtp_user, smtp_pass)
-            s.sendmail(smtp_user, [notify_to], msg.as_string())
-    except Exception:
-        pass  # Never let email failure break the signup response
-
-
 def _update_profile(session_id: str) -> None:
     rec = _sessions.get(session_id)
     if not rec or not rec.get("consent"):
@@ -324,48 +261,6 @@ async def my_data(req: SessionRequest):
         "messages_stored": len(rec.get("messages", [])) if rec.get("consent") else 0,
         "retention_days":  RETENTION_DAYS,
     }
-
-
-@app.post("/register")
-async def register(req: RegisterRequest):
-    """Explicit account creation — stores data under confirmed consent."""
-    import re
-    if not req.name.strip() or not re.match(r"[^@]+@[^@]+\.[^@]+", req.email):
-        return JSONResponse({"ok": False, "error": "Please provide a valid name and email."}, status_code=400)
-
-    name       = req.name.strip()
-    email      = req.email.strip().lower()
-    store_name = req.store_name.strip()
-
-    rec = _get_session(req.session_id)
-    rec["consent"] = True
-    rec["profile"].update({
-        "contact_name":  name,
-        "contact_email": email,
-        "store_name":    store_name,
-    })
-    _persist(req.session_id, rec)
-
-    # Append to leads CSV (persistent volume backup)
-    leads_file = Path(__file__).parent / "data" / "leads.csv"
-    leads_file.parent.mkdir(exist_ok=True)
-    if not leads_file.exists():
-        leads_file.write_text("session_id,name,email,store_name,registered_at\n")
-    with leads_file.open("a", encoding="utf-8") as f:
-        import csv as _csv, io as _io
-        buf = _io.StringIO()
-        _csv.writer(buf).writerow([
-            req.session_id, name, email, store_name,
-            time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        ])
-        f.write(buf.getvalue())
-
-    # Google Sheet + email — both fire in background, never delay the response
-    loop = asyncio.get_event_loop()
-    loop.run_in_executor(None, _send_to_google_sheet, name, email, store_name)
-    loop.run_in_executor(None, _send_lead_email, name, email, store_name)
-
-    return {"ok": True}
 
 
 @app.post("/delete-my-data")
